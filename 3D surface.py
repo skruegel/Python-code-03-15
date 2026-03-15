@@ -2,8 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-# --- Project Parameters ---
-alpha = 15.0      
+# --- Updated Project Parameters ---
+alpha = 25.0      # Increased stiffness
 c = 0.5           
 y_target = np.array([1.0, 0.0])
 learning_rate = 0.1
@@ -67,21 +67,34 @@ for i in range(N_grid):
 fig = plt.figure(figsize=(12, 9))
 ax = fig.add_subplot(111, projection='3d')
 
-surf = ax.plot_surface(X1, X2, Z, cmap='viridis', alpha=0.5, edgecolor='none')
+# Surface plot
+surf = ax.plot_surface(X1, X2, Z, cmap='viridis', alpha=0.4, edgecolor='none')
 cbar = fig.colorbar(surf, ax=ax, shrink=0.5, aspect=10)
 cbar.set_label('Cost J(x)')
 
+# Plot Paths and Yellow Triangle Final Points
 for i in range(num_runs):
-    ax.plot(all_paths[i][:, 0], all_paths[i][:, 1], all_costs[i], color='red', alpha=0.2, linewidth=0.5)
-    ax.scatter(all_paths[i][-1, 0], all_paths[i][-1, 1], all_costs[i][-1], color='black', s=5, alpha=0.5)
+    path = all_paths[i]
+    costs = all_costs[i]
+    # Draw path line
+    ax.plot(path[:, 0], path[:, 1], costs, color='red', alpha=0.15, linewidth=0.5)
+    
+    # Draw final point (Yellow Triangle)
+    ax.scatter(path[-1, 0], path[-1, 1], costs[-1], 
+               color='yellow', 
+               marker='^', 
+               s=100, 
+               edgecolors='black', 
+               linewidths=1,
+               depthshade=False, 
+               zorder=10)
 
 ax.set_xlabel('x1')
 ax.set_ylabel('x2')
 ax.set_zlabel('Cost J(x)')
-ax.set_title('3D Landscape')
+ax.set_title(f'3D Landscape (alpha=25, Yellow Triangles = Final Points)')
 
-# --- ORIENTATION ADJUSTMENT ---
-# azim=-60 rotates the plot so that the (1,0) corner faces forward
+# Orientation: (x1=1, x2=0) in front
 ax.view_init(elev=30, azim=-60)
 
 plt.show()
