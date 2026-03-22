@@ -10,12 +10,8 @@ iterations = 250
 num_runs = 100    
 
 # Gaussian-like Kernel A (2x2)
-sigma = 1.0
-w0 = np.exp(-0**2/(2*sigma**2))
-w1 = np.exp(-1**2/(2*sigma**2))
-row_sum = w0 + w1
-A = np.array([[w0/row_sum, w1/row_sum],
-              [w1/row_sum, w0/row_sum]])
+A_raw = np.array([[1.0, 0.5], [0.5, 1.0]])
+A = A_raw / A_raw.sum(axis=1, keepdims=True)
 
 def h(z):
     return 1 / (1 + np.exp(-alpha * (z - c)))
